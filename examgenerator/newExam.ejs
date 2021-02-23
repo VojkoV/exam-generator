@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+  <link rel='icon' href='images/favicon.ico' type='image/x-icon'/> 
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/newExamStyle.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/e7bf0ee0e1.js" crossorigin="anonymous"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <title> New Exam </title>
+</head>
+
+<body id="grad1">
+    <div id="nav-placeholder">
+
+    </div>
+    <script>
+    $(function(){
+      $("#nav-placeholder").load("navbar.html");
+    });
+    // $(window).on('beforeunload', function(){
+    //     $(window).scrollTop(0);
+    // });
+    </script>
+
+    <!-- <script>
+        $("ul.droptrue").sortable({
+                connectWith: "ul"   
+        });
+
+        $("ul.dropfalse").sortable({
+            connectWith: "ul",
+            dropOnEmpty: false
+        });
+    </script> -->
+    <div class = "content">
+        <!-- <div id = 'userInfo'>	
+            <p>Name: <%= username %>
+                <br>Mail: <%= email %>
+            </p>
+        </div> -->
+        <!-- <ul id="sortable5" class="list-group droptrue">
+            <li class="list-group-item active">Lion</li>
+            <li class="list-group-item">Dog</li>
+            <li class="list-group-item">Cat</li>
+            <li class="list-group-item">Tiger</li>
+          </ul>
+          
+          <ul id="sortable6" class="list-group dropfalse">
+            <li class="list-group-item active">Fish</li>
+            <li class="list-group-item">Bird</li>
+            <li class="list-group-item">Falcon</li>
+            <li class="list-group-item">Mouse</li>
+          </ul>
+          
+          <ul id="sortable7" class="list-group droptrue grey lighten-1 py-2">
+          </ul> -->
+        <h2>Create an exam</h2>
+        <br><label for="template">Exam title: </label> 
+        <input class="form-control data" id="title" type="text" name="title" 
+            size="45%" maxlength="20" required style="margin-bottom: 40px;">
+            <!-- onchange="$('#templateAlert').hide();validateTemplate();"> -->
+
+        <label for="accordionFolders">Choose questions to be included:</label>
+        <div class="accordion " id="accordionFolders">
+            <%for (var folder in folders){%>
+                <%var s = JSON.stringify(folders[folder]);%>
+                <%var numOfQ = folders[folder].questions.length;%>
+                <div class="card">
+                    <div class="card-header btn "  type="button" id="heading<%=folder%>" 
+                        data-toggle="collapse" data-target="#collapse<%=folder%>">
+                        <%=folders[folder].name%><i class="fas fa-angle-down rotate-icon accordionArrowPositioning"></i>
+                    </div>
+                        <div id="collapse<%=folder%>" class="collapse " data-parent="#accordionFolders">
+                        <% for (let question = 0;question < numOfQ; question++){%>  
+                            <% let q = JSON.parse(folders[folder].questions[question]);%>  
+                            <% var qFCall = folders[folder].questions[question];%>  
+                            <% if(q.template != null){
+                                QText = q.template;}
+                            else {QText = q.question;}%>  
+                            <% let text = `Question: ${question+1}`+": "+QText;%>
+                            <div class="card-body collapse-question">
+                                <%=text%>
+                                <% if(q.groups != null){%>
+                                    <select id="<%=folder%><%=question%>">
+                                        <%for (let groupIndex = 0;groupIndex < q.groups.length; groupIndex++){%>
+                                            <% let groupName = q.groups[groupIndex].groupName %>
+                                            <% console.log("name: "+groupName)%>
+                                            <option value="<%=groupName%>"><%=groupName%></option>
+                                        <%}%>
+                                    </select>
+                                    <button class="btn" onclick="addQuestionToTest(<%=qFCall%>,`<%=QText%>`,document.getElementById('<%=folder%><%=question%>').value);">
+                                        <i class="fa fa-plus fa-lg float-right plus-addQuestion"></i></button>
+                                <%}else{%>
+                                    <button class="btn" onclick="addQuestionToTest(<%=qFCall%>,`<%=QText%>`);">
+                                        <i class="fa fa-plus fa-lg float-right plus-addQuestion"></i></button>
+                                <%}%>  
+                            </div>
+                        <%}%>  
+                    </div>
+                </div>
+            <%}%>
+            <script>
+                function addQuestionToTest(question,text,groupName){
+                    // question = JSON.stringify(q);
+                    var selectForm = document.getElementById("examSelect");
+                    var option = document.createElement("option");
+                    option.text = text;
+                    if(groupName){
+                        question.selectedGroup = groupName;
+                        console.log("adding grouped q")
+                        console.log(question);
+                        option.text += ` [${groupName}]`;
+
+                    }
+                    question = JSON.stringify(question);
+                    option.value = question;
+                    selectForm.add(option);
+                }  
+            </script>          
+        </div>
+        <div>
+            <select id="examSelect"  class="form-control" data-style="btn-primary" size="6"></select>
+            <div id="selectFormBtns">
+                <button class="btn" alt="Move Up" onclick="moveOptionUp('examSelect')"><i class="fas fa-arrow-up fa-lg"></i></button>
+                <button class="btn" alt="Move Down" onclick="moveOptionDown('examSelect')"><i class="fas fa-arrow-down fa-lg"></i></button>
+                <button class="btn" alt="Remove" onclick="removeOption('examSelect')"><i class="fa fa-trash fa-lg"></i></button>
+            </div>
+        <script>
+            var arr = [];
+            function removeOption(selectId){
+                var selectList = document.getElementById(selectId);
+                var selectOptions = selectList.getElementsByTagName('option');
+                let selected = selectList.selectedIndex;
+                for (var i = 0; i < selectOptions.length; i++) {
+                    var opt = selectOptions[i];
+                    if (opt.selected) {
+                        selectList.removeChild(opt);
+                    }
+                }
+                if(selected) selectList.selectedIndex = selected-1;
+                else selectList.selectedIndex = selected;
+            }
+
+            function moveOptionUp(selectId) {
+                var selectList = document.getElementById(selectId);
+                var selectOptions = selectList.getElementsByTagName('option');
+                for (var i = 1; i < selectOptions.length; i++) {
+                    var opt = selectOptions[i];
+                    if (opt.selected) {
+                        selectList.removeChild(opt);
+                        selectList.insertBefore(opt, selectOptions[i - 1]);
+                    }
+                }
+            }
+
+            function moveOptionDown(selectId) {
+                var selectList = document.getElementById(selectId);
+                var selectOptions = selectList.getElementsByTagName('option');
+                for (var i = selectOptions.length - 2; i >= 0; i--) {
+                    var opt = selectOptions[i];
+                    if (opt.selected) {
+                        var nextOpt = selectOptions[i + 1];
+                        opt = selectList.removeChild(opt);
+                        nextOpt = selectList.replaceChild(opt, nextOpt);
+                        selectList.insertBefore(nextOpt, opt);
+                    }
+                }
+            }
+
+            function submitExam(selectId){
+                var selectOptions = document.getElementById(selectId).getElementsByTagName('option');
+                // let arr = [];
+                arr = [];
+                for (var i = 0;i< selectOptions.length ; i++) {
+                    arr.push(JSON.parse(selectOptions[i].value));
+                }
+                console.log(arr);
+                // on(arr);
+                // $.post( "/generateExam", { questions : arr ,wordFile: true, pdfFile: true},(filePath) => {
+                //     console.log("filepath = "+filePath);
+                //     let link = document.createElement("a");
+
+                    // link.download = "Exam_"+  Date.now()+".docx";
+                    // link.download = `Exam_${Date.now()}.docx`;
+
+                //     link.download = `Exam_1.docx`;
+                //     link.href = filePath;
+                //     link.click();
+                // });
+                // console.log("after posting");
+            }
+        </script>
+        <!-- <button class="btn btn-primary" onclick="downloadExam();" >Download exam</button> -->
+        <button class="btn btn-primary float-right" style="margin-right: 200px;"  data-toggle="modal" data-target="#myModal" onclick="submitExam('examSelect');" >Generate exam</button>
+        
+        <!-- <script>
+            function submitForm(){
+                console.log("submitForm running");
+                let q = validateTemplate();
+                if(q) {
+                    console.log("QUESTION = ");
+                    console.log(q);
+                    on(q);
+                }
+                else{
+                    console.log("sth went wrong");
+                }
+                return false;
+            }
+        </script> -->
+
+    <!-- <div style="padding:20px">
+        <h2>Overlay with Text</h2>
+        <button data-toggle="modal" data-target="#myModal" onclick="on()">Turn on overlay effect</button>
+    </div> -->
+
+    <!-- Button to Open the Modal -->
+<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    Open modal
+  </button> -->
+  <script>
+        async function generateAndDownload(){
+            let examTitle = document.getElementById("title").value;
+            let solutionsCheckbox = document.getElementById('solutionsCheckbox').checked;
+            let fileName = document.getElementById('fileName').value;
+            if(!fileName) fileName = `Exam_${Date.now()}`;
+            let fileExtension = document.getElementById('fileExtension').value;
+            if(!fileExtension) fileExtension = `docx`;
+            await $.post( "/generateExam", { questions : arr ,fileExtension: fileExtension, fileName: fileName, solutions: solutionsCheckbox, examTitle: examTitle},(filePath) => {})
+             .done((filePaths) => {
+                console.log("filePaths = ");
+                console.log(filePaths)
+                let link = document.createElement("a");
+                // // link.download = "Exam_"+  Date.now()+".docx";
+                // link.download = `${fileName}.${fileExtension}`;
+                // // link.download = `Exam_1.docx`;
+                // link.href = filePath;
+                // // link.href = "https://media.api2pdf.com/059c29c0-783d-11ea-9367-95a2be9f6319?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJSHKEFTKBQX2AUYQ%2F20200406%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200406T193007Z&X-Amz-Expires=86400&X-Amz-Signature=bd61b62f00f9d0599b697052ba8711844ffeb18ffecd08277de1b7c8c7af1084&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3Bfilename%3D%22059c29c0-783d-11ea-9367-95a2be9f6319.pdf%22&response-content-type=application%2Fpdf";
+                // link.click();
+                
+                if(filePaths.docx){
+                    link.download = `${fileName}.docx`;
+                    link.href = filePaths.docx;
+                    link.click();
+                }
+                if(filePaths.solutions){
+                    link.download = `${fileName}_solutions.docx`;
+                    link.href = filePaths.solutions;
+                    link.click();
+                }
+                if(filePaths.pdf){
+                    link.download = `${fileName}.pdf`;
+                    link.href = filePaths.pdf;
+                    link.click();
+                    // setTimeout(()=>{link.click();}, 500);
+                }
+                // let link = document.createElement("a");
+                // // link.download = "Exam_"+  Date.now()+".docx";
+                // link.download = `${fileName}.${fileExtension}`;
+                // // link.download = `Exam_1.docx`;
+                // link.href = filePath;
+                // // link.href = "https://media.api2pdf.com/059c29c0-783d-11ea-9367-95a2be9f6319?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJSHKEFTKBQX2AUYQ%2F20200406%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200406T193007Z&X-Amz-Expires=86400&X-Amz-Signature=bd61b62f00f9d0599b697052ba8711844ffeb18ffecd08277de1b7c8c7af1084&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3Bfilename%3D%22059c29c0-783d-11ea-9367-95a2be9f6319.pdf%22&response-content-type=application%2Fpdf";
+                // link.click();
+
+
+                // const documentName = "api.pdf" // here your file name 
+                // axios({
+                //     url: filePath,
+                //     method: 'GET',
+                //     responseType: 'blob', // important
+                // }).then((response) => {
+                //     const url = window.URL.createObjectURL(new Blob([response.data]));
+                //     const link = document.createElement('a');
+                //     link.href = url;
+                //     link.setAttribute('download', 'file.pdf'); //or any other extension
+                //     document.body.appendChild(link);
+                //     link.click();
+                // });
+
+                // fetch(url)
+                // .then((response) => {
+                //     if (!response.ok) {
+                //     throw new Error('Network response was not ok');
+                //     }
+                //     return response.blob();
+                // })
+                // .then((myBlob) => {
+                //     myImage.src = URL.createObjectURL(myBlob);
+                // })
+                // .catch((error) => {
+                //     console.error('There has been a problem with your fetch operation:', error);
+                // });
+
+                // fetch(filePath)
+                //     .then(res => {
+                //         return res.blob();
+                //     })
+                //     .then(blob => {
+                //         const href = window.URL.createObjectURL(blob);
+                //         const a = document.createElement("a");
+                //         a.download = documentName;
+                //         a.href = href;
+                //         a.click();
+                //         a.href = "";
+                //     })
+                //     .catch(err => console.error(err));
+
+
+                var alertBox = document.getElementById("form-alert");
+                var alertMsg = document.getElementById("alertMsg");
+                alertBox.style.pointerEvents = "auto";
+                alertBox.style.opacity = "1";
+                alertBox.className = "alert success";
+                alertMsg.innerHTML = "<strong>Success!</strong> Redirecting... ";
+                // alertMsg.style.margin = "10px 0";
+                setTimeout(()=>{window.location.href = "/newExam";}, 500);
+                
+            })
+            .fail((err) => {
+                alert("Error occured.\n Please try again!" );
+                console.log(err);
+                // window.location.href = "/newExam";
+            })
+            // .always(()=>{
+            //     setTimeout(()=>{window.location.href = "/profile";}, 2000);
+            // })
+            console.log("after posting");
+        }
+  </script>
+  <!-- The Modal -->
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <!-- <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+        </div> -->
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <div class="alert warning" id ="form-alert" >
+                <!-- this.parentElement.style.display='none'; -->
+                <!-- document.getElementById("myDIV").style.opacity = "0.5"; -->
+                <span class="closebtn" onclick="this.parentElement.style.opacity = '0';this.parentElement.style.pointerEvents = 'none';">&times;</span>
+                <div id="alertMsg">Is it OK?</div>
+                <!-- <div id="alertMsg">Invalid folder name.<br> Name entered is already in use!</div> -->
+            </div>
+            <h4 class="modal-title">How do you want your exam?</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+            
+            <form class = "overlay" action="/" method="post"  onsubmit="event.preventDefault();this.submitExamBtn.disabled = true;generateAndDownload();">  
+                
+                <div class="form-row align-items-left moveRight justify-content-md-center">
+                    
+                  <div class="col-auto">
+                    <!-- <label class="sr-only" for="inlineFormInputGroup">Username</label> -->
+                    <label for="fileName">File name:</label>
+                    <div class="input-group mb-2"> 
+                        <input type="text" class="form-control" id="fileName" value="Exam" required>
+                        <div class="input-group-prepend">
+                            <div id="fileExtension" class="input-group-text" value="docx">.docx</div>
+                        </div>
+                    </div>
+                  </div>
+                  
+                </div>
+                <p>Save as:</p>
+                <div id="saveAs" class="form-group">
+                    <!-- docx radio-->
+                    <!-- <label for="radios">Save as:</label> -->
+                    <div class=" custom-radio custom-control-inline" id="radios"> 
+                        <input type="radio" class="custom-control-input" id="defaultInline1" name="fileType" value=".docx" checked>
+                        <label class="custom-control-label" for="defaultInline1"><img style="height: 50px" src="images/word.png" onclick="getElementById('fileExtension').innerText='.docx';getElementById('fileExtension').value='docx';" alt=".docx"></label>
+                    </div>
+                    <!-- PDF radio-->
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="defaultInline2" name="fileType" value=".pdf">
+                        <label class="custom-control-label" for="defaultInline2"><img style="height: 50px" src="images/pdf.png" onclick="getElementById('fileExtension').innerText='.pdf';getElementById('fileExtension').value='pdf';" alt=".pdf"></label>
+                    </div>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="solutionsCheckbox" name="solutionsCheckbox">
+                    <label class="custom-control-label" id="solutionsCheckboxMsg" for="solutionsCheckbox">Generate solutions document</label>
+                </div>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <div >
+                <button name="submitExamBtn" type="submit" class="btn btn-primary float-right">Download</button>
+            </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+    <script>
+
+        function on(q) {
+            // location.href = `http://api.examgenerator.me/editF/${editBtn.value}`;
+            // question = q;
+            console.log("Question passed to overlay:");
+            console.log(question);
+            // document.getElementById("overlay").style.display = "block";
+        }
+
+        // function off() {
+        //     document.getElementById("overlay").style.display = "none";
+        // }
+    </script>
+
+</body>
+</html>

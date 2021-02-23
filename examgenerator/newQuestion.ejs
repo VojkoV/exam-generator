@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+  <link rel='icon' href='images/favicon.ico' type='image/x-icon'/> 
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/e7bf0ee0e1.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
+
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+
+  <title> New Question </title>
+</head>
+
+<body id="grad1">
+    <div id="nav-placeholder">
+
+    </div>
+    <script>
+    $(function(){
+      $("#nav-placeholder").load("navbar.html");
+    });
+    </script>
+
+                <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">Small modal</button>
+
+                <div id="modal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                    ...
+                    </div>
+                </div>
+                </div> -->
+    <div class = "content">
+        <!-- <div id = 'userInfo'>	
+            <p>Name: <%= username %>
+                <br>Mail: <%= email %>
+            </p>
+        </div> -->
+        <h2>Add a new question: </h2>
+        <script type="text/javascript">
+            var i = 3;
+            var nInputs = 4;
+            const maxInputs = 10;
+            function increment() {
+                i += 1;
+                nInputs += 1;
+                if(nInputs == maxInputs){
+                    document.getElementById("addInputBtn").disabled = true;
+                }
+            }
+            function decrement(){
+                if(nInputs == maxInputs){
+                    document.getElementById("addInputBtn").disabled = false;
+                }
+                nInputs -= 1;
+            
+            }
+
+            function addInputField() {
+                var div = document.createElement('DIV');
+                var answerInput = document.createElement("INPUT");
+                var btn = document.createElement('BUTTON');
+                btn.innerHTML = `<i class="fa fa-trash fa-lg"></i></button>`;
+                btn.setAttribute("class", "btn");
+                btn.onclick = () => {
+                    let toDelete = btn.parentNode;
+                    toDelete.parentNode.removeChild(toDelete);
+                    decrement();
+                };
+                answerInput.setAttribute("class", "dataExtra data");
+                answerInput.setAttribute("type", "text");
+                // answerInput.setAttribute("value", "");
+                answerInput.required = true;
+                answerInput.setAttribute("placeholder", "Answer");
+
+
+                
+                increment();
+                answerInput.setAttribute("name", "answer_"+i); 
+                //Keep attribute in lower case
+                div.appendChild(answerInput);
+                div.appendChild(btn);
+                document.getElementById("form-div").appendChild(div);
+            }
+            
+            function showUserInput(){
+                let elements = document.getElementsByClassName("data");
+                let values = [];
+                for(let e = 0;e<elements.length;e++){
+                    console.log("element "+e+" = "+elements[e].value);
+                    values.push(elements[e].value);
+                }       
+                return values;
+            }
+        
+            function submitForm(){
+                console.log("submitForm running");
+                let elements = showUserInput();
+                if(elements) {
+                    console.log("QUESTION = ");
+                    console.log(elements);
+                    on(elements);
+                }
+                else{
+                    console.log("sth went wrong");
+                }
+                return false;
+            }
+        </script>
+
+        <form class="form" id="dataForm" method="POST" action="/" onsubmit="event.preventDefault(); submitForm();">
+            <div id="form-div">
+                <br><label for="template">Question</label><br>
+                <input class="data" id="question" type="text" name="question" 
+                    size="70%" placeholder="What country won the 2018 FIFA World Cup?"
+                    required autocomplete="off">
+                <div class="alert alert-danger alert-inline" id="templateErrorMsg" style="display:none;" role="alert">Well done!</div>
+                <br>
+                <small id="templateInfo" class="form-text text-muted">Write a new question</small>
+                <hr>
+                <label for="a_level[+i][0]">Answers</label> <br />
+                <small id="dataInputInfo" class="form-text text-muted">
+                    Write the answers for the question above:<br>
+                </small>
+                <!-- Correct answer -->
+                <label for="answer_0">Correct answer:</label><br>
+                <input class="data" type="text" name="answer_0" required value="" placeholder="Answer" />
+                <!-- 2. answer -->
+                <br><label for="answer_0">Other answers:</label><br>
+                <input class="data" type="text" name="answer_1" required value="" placeholder="Answer" />
+                <!-- 3. answer -->
+                <br>
+                <input class="data" type="text" name="answer_2" required value="" placeholder="Answer" />
+                <!-- 4. answer -->
+                <br>
+                <input class="data" type="text" name="answer_3" required value="" placeholder="Answer" />
+            </div>
+            <div class="" style="padding-bottom:10px">
+                <small id="maxInputsMsg" class="form-text text-muted"></small>
+                <button id="addInputBtn" class="btn" onclick="addInputField()"><i class="fa fa-plus"></i></button>      
+            </div>
+            <div class="dash-submit">
+                <input class="btn btn-primary" type="submit" value="Save" />
+            </div>
+        </form>
+        <!-- <div style="padding:20px">
+            <h2>Overlay with Text</h2>
+            <button onclick="on()">Turn on overlay effect</button>
+        </div> -->
+    </div>  
+
+    <script>
+        // Set the custom message for number of datasets
+        document.getElementById("maxInputsMsg").innerHTML = "The maximum number of data pairs is "+maxInputs+".";
+    </script>
+    
+    <div id="overlay" >
+        <div class="container text-dark bg-light" id="content-overlay">
+            <div class="alert warning" id ="form-alert" >
+                <span class="closebtn" onclick="this.parentElement.style.opacity = '0';this.parentElement.style.pointerEvents = 'none';">&times;</span>
+                <div id="alertMsg"></div>
+            </div>
+            <br><h1>Save to...</h1>
+            <h2>An existing folder:</h2>
+            <form class = "overlay" action="/" method="post"  onsubmit="event.preventDefault();saveToFolder();">
+                <div class="form-group">
+                    <label for="selectF" class="text-dark bg-light">Folders:</label>
+                    <select id="selectF" class="form-control">
+                        <%for (var folder in folders){%>
+                            <option value="<%=folders[folder]._id%>" class ="overlay"> <%=folders[folder].name%></option>
+                        <%}%>
+                    </select>
+                    <br><button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+            
+            <h2>A new folder:</h2>
+            <form action="/" method="post" class = "overlay" onsubmit="event.preventDefault();validateNameForm();">
+                <div class="">
+                    <label for="fName">Folder name:</label>
+                    <input type="text" class = "form-control" required id="fName" placeholder="Folder" >
+                    <small id="fNameHelp" class="form-text text-muted">Enter a name for the new folder.</small>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+                
+            </form>
+        
+            <br><button type="button" class="btn btn-primary float-right" onclick="off()"> Cancel</button>
+        </div>
+
+        <span style=" color: rgba(8, 136, 255); ">
+            <i onclick="off()" class="far fa-times-circle  topright"></i>
+        </span>
+    </div>
+
+    <script>
+        function saveToFolder(){
+            let folderId = document.getElementById('selectF');
+            console.log("save to: "+folderId.value);  
+            $.post( "/saveQuestion", { folder_id : folderId.value, question : question })
+            .done(() => {
+                var alertBox = document.getElementById("form-alert");
+                var alertMsg = document.getElementById("alertMsg");
+                alertBox.style.pointerEvents = "auto";
+                alertBox.style.opacity = "1";
+                alertBox.className = "alert success";
+                alertMsg.innerText = "Success! Redirecting...";
+                alertMsg.style.margin = "10px 0";
+                setTimeout(()=>{window.location.href = "/profile";}, 2000);
+            })
+            .fail(() => {
+                alert( "error" );
+            })
+        }
+
+        function validateNameForm(){
+            // template.setCustomValidity(`There must be ONE placeholder.`);
+            var fNames = <%-JSON.stringify(fNames)%>;
+            var newFolder = document.getElementById('fName')
+            let nameIsInUse = fNames.includes(newFolder.value);
+            if(!nameIsInUse){
+                console.log("name entererd is valid");
+                console.log("save to: "+newFolder.value);
+                $.post( "/saveQuestion", { fName : newFolder.value, question : question })
+                .done(() => {
+                    var alertBox = document.getElementById("form-alert");
+                    var alertMsg = document.getElementById("alertMsg");
+                    alertMsg.innerText = "Success! Redirecting...";
+                    alertMsg.style.margin = "10px 0";
+                    alertBox.style.pointerEvents = "auto";
+                    alertBox.style.opacity = "1";
+                    alertBox.className = "alert success";
+                    // alertMsg.innerText = "Template was successfully saved!";
+                    setTimeout(()=>{window.location.href = "/profile";}, 2000);
+                    // alert( "second success" );
+                })
+                .fail(() => {
+                    alert( "error" );
+                })
+            }
+            else{
+                console.log("name entered is already in use");
+                var alertBox = document.getElementById("form-alert");
+                var alertMsg = document.getElementById("alertMsg");
+                alertMsg.innerText = "Invalid folder name.\n Name entered is already in use!";
+                // alertMsg.style.margin = "10px 0";
+                alertBox.style.pointerEvents = "auto";
+                alertBox.style.opacity = "1";
+                alertBox.className = "alert warning";
+            }    
+        }
+
+
+
+
+
+        // function saveToFolder(){
+        //     console.log("We are in the function");
+        //     let folderId = document.getElementById('selectF');
+        //     console.log("save to: "+folderId.value);
+        //     // location.href = `http://api.examgenerator.me/editF/${editBtn.value}`;
+        //     // $.post("/saveQuestion", { folder : folderId.value, question : question }, () =>{
+        //     //     location.reload(true/false);
+        //     //     return console.log("successful request "+deleteBtn.value);
+        //     // });
+                
+        //     $.post( "/saveQuestion", { folder : folderId.value, question : question } );
+        //     console.log("after posting");
+        // }
+
+        // function validateNameForm(){
+        //     // template.setCustomValidity(`There must be ONE placeholder.`);
+        //     var fNames = <%- JSON.stringify(fNames) %>;
+        //     var newFolder = document.getElementById('fName')
+        //     // var form = document.getElementById('newFForm')
+        //     // console.log("fNam.value \n\n\n\n\n\n fnman.val= "+fName.value);
+        //     // console.log("names = ");
+        //     console.log("fnames = "+fNames);
+        //     let nameIsInUse = fNames.includes(newFolder.value);
+        //     if(!nameIsInUse){
+        //         console.log("name entererd is valid");
+        //         console.log("save to: "+newFolder.value);
+        //         $.post( "/saveQuestionToNewFolder", { fName : newFolder.value, question : question } );
+        //         console.log("after posting");
+        //     }
+        //     else{
+        //         console.log("name entered is already in use");
+        //         // location.reload(true/false);
+        //     }    
+        // }
+
+        var question = null;
+        function on(q) {
+            // location.href = `http://api.examgenerator.me/editF/${editBtn.value}`;
+            // $('#modal').on('shown.bs.modal', function() {
+            //     console.log("modal in")
+            // });
+
+            // $('#modal').modal('show',function(e){
+            //     console.log(e)
+            // });
+            
+            question = q;
+            console.log("Question passed to overlay:");
+            console.log(question);
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function off() {
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>

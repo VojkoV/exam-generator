@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Folder  </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+
+<html>
+    <body>
+        <h1>ExamGenerator </h1>
+        <!-- <h2>Folder <%=folder%></h2> -->
+        <div id = 'userInfo'>	
+            <p>Name: <%= username %></p>
+            <p>Mail: <%= email %></p>
+        </div>	
+        <h2>Folder <%= folderName %></h2>	
+
+        <p id="questions">_______________</p>
+        <div id="folder-info"></div>
+        <div id="question-info"></div>
+
+        <script>
+            let folder = <%- JSON.stringify(folder) %>;
+            console.log(folder.questions.length);
+            console.log("folder is above");
+            document.getElementById("questions").innerHTML = "";
+            var regex = /{.*}/; //gi;
+            // Clear the space for new questions
+            var qElement = document.getElementById("folder-info");
+            while (qElement.firstChild) {
+                qElement.removeChild(qElement.firstChild);
+            }
+            if(folder.questions.length == 0){
+                document.getElementById("questions").innerHTML = "This folders is empty!";
+            }
+            else{
+                for (let question = 0;question < folder.questions.length; question++){
+                    let q = JSON.parse(folder.questions[question]);
+                    let text = `Question: ${question+1}`+": "+q.template.replace(regex,"______");
+                    let a = document.createElement('a');
+                    let linkText = document.createTextNode(text);
+                    a.appendChild(linkText);
+                    a.href = `#`;
+                    qElement.appendChild(a);
+                    let br = document.createElement('br');
+                    qElement.appendChild(br);
+                }
+            }
+        </script>
+    </body>
+    <p id="questions">_______________</p>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    function newQuestion(){
+
+    }
+    </script>
+
+    <div class = "buttons">     
+        <br><button type="button" id="newQbtn" onclick="showQuestionForm()">New Question</button>
+        <script>
+            function showQuestionForm() {
+                let x = document.getElementById("question-form");
+                let btn = document.getElementById("newQbtn");
+                btn.style.display = "none";
+                if (x.style.display === "none")
+                    x.style.display = "block";  
+                else x.style.display = "none";
+            }
+        </script>
+        <div id = "question-form" class="question-form" style="display: none">
+            <form id="newQ" action="http://api.examgenerator.me/newQ" method="post" onsubmit="event.preventDefault(); validatePassword();">
+                <br><label for="template">Question template</label> <br />
+                <input type="text" name="template" placeholder="What is the capital of |placeholder|?" required="">
+                <hr>
+                <br><label for="data1">Placeholders</label> <label for="data2">Data</label><br />
+                <input type="text" name="data1" placeholder="England" required="">
+                
+                <input type="text" name="data2" placeholder="London" required="">
+                <div class="tp">
+                    <input type="submit" value="Register">
+                </div>
+            </form>
+        </div>
+        <br><button type="button" onclick="location.href = `http://api.examgenerator.me/logout`;">Logout</button>
+        <input type="number" id="member" onchange="addFields()" name="member" min ="3" max ="20" value="">Number of members: (3-20)<br />
+        <div id="container"/>
+    </div>  
+    <script type='text/javascript'>
+        function addFields(){
+            // Number of inputs to create
+            var number = document.getElementById("member").value;
+            // Container <div> where dynamic content will be placed
+            var container = document.getElementById("container");
+            // Clear previous contents of the container
+            while (container.hasChildNodes()) {
+                container.removeChild(container.lastChild);
+            }
+            for (i=0;i<number;i++){
+                // Append a node with a random text
+                container.appendChild(document.createTextNode("Member " + (i+1)));
+                // Create an <input> element, set its type and name attributes
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "member" + i;
+                container.appendChild(input);
+                // Append a line break 
+                container.appendChild(document.createElement("br"));
+            }
+        }
+    </script>
+        
+</html>

@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+  <link rel='icon' href='images/favicon.ico' type='image/x-icon'/> 
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/e7bf0ee0e1.js" crossorigin="anonymous"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <title>Home</title>
+</head>
+
+<body id="grad1">
+    <div id="nav-placeholder">
+
+    </div>
+    <script>
+    $(function(){
+      $("#nav-placeholder").load("navbarOut.html");
+    });
+    </script>
+
+    <div class = "content">  
+        <div id="coverPhoto-div">
+            <img src="images/coverPhotoNew.png" id="coverPhoto" alt="Cover photo">
+        </div>
+        <div id="cover-buttons-container">
+            <button class=" btn btn-primary cover-buttons" onclick="window.location.href='#forms'">Sign in</button>
+            <button class=" btn btn-primary cover-buttons" onclick="window.location.href='#forms'">Sign up</button>
+        </div>
+        
+        <div id="forms">
+            <div class="login-form">
+                <div class="alert warning" id ="loginAlert" >
+                    <!-- this.parentElement.style.display='none'; -->
+                    <!-- document.getElementById("myDIV").style.opacity = "0.5"; -->
+                    <span class="closebtn" onclick="this.parentElement.style.opacity = '0';this.parentElement.style.pointerEvents = 'none';">&times;</span>
+                    <div id="loginAlertMsg">Email or password are incorrect!</div>
+                    <!-- <div id="alertMsg">Invalid folder name.<br> Name entered is already in use!</div> -->
+                </div>
+                <h3 class="form-title">Log in:</h3>
+                <!-- onsubmit="event.preventDefault(); validatePassword();" -->
+                <form  novalidate id="loginForm" action="http://api.examgenerator.me/login" method="post"  onsubmit="event.preventDefault(); login();">
+                    <!-- <input type="text" name="logemail" placeholder="E-mail" autocomplete="email" required="">
+                    <input type="password" name="logpassword" placeholder="Password" autocomplete="current-password" required="">
+                    <div class="tp">
+                        <input type="submit" value="Log in">
+                    </div> -->
+
+
+                    <div class="form-group">
+                        <label for="loginEmail">Email:</label>
+                        <input type="text" id="loginEmail" name="email" class="form-control" placeholder="E-mail" autocomplete="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPass">Password:</label>
+                        <input type="password" id="loginPass" name="password" class="form-control" placeholder="Password" autocomplete="new-password" required="" >
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Login" id="loginSubmit" class="btn btn-primary  vertical-align">
+                    </div>
+
+
+                </form>
+            </div>
+            <script>
+                var loginForm = document.getElementById('loginForm');
+                async function login(){
+                    let emailField = loginForm.elements["email"];
+                    let passwordField = loginForm.elements["password"];
+                    if(!emailField.value){
+                        console.log("no email entered");
+                        emailField.classList.add('is-invalid');
+                    }
+                    else emailField.classList.remove('is-invalid');
+                    if(!passwordField.value){
+                        console.log("no password entered")
+                        passwordField.classList.add('is-invalid');
+                    }
+                    else passwordField.classList.remove('is-invalid');
+                    if(emailField.value && passwordField.value){
+                        await $.post( "/login", {email: emailField.value,password: passwordField.value},(err,d) => {
+                            console.log("original cb")
+                            console.log("err: ")
+                            console.log(err)
+                            console.log("d: ")
+                            console.log(d)
+                        })
+                        .done((data) => {
+
+                            console.log("data returned = ");
+                            console.log(data);
+                            if(data == "wrong credentials"){
+                                var alertBox = document.getElementById("loginAlert");
+                                alertBox.style.pointerEvents = "auto";
+                                alertBox.style.opacity = "1";
+                                console.log("wrong credentials.")
+                            }
+                            if(data == "logged"){
+                                console.log("Successful login.")
+                                window.location.href = "/";
+                            }
+                            // setTimeout(()=>{window.location.href = "/profile";}, 2000);
+                        })
+                        .fail((err) => {
+                            console.log("   fail")
+                            console.log("err: ");
+                            console.log(err);
+                        });
+                    }
+                }
+            </script>
+            <div class="reg-form"> 
+                <div class="alert warning" id ="regAlert" >
+                    <span class="closebtn" onclick="this.parentElement.style.opacity = '0';this.parentElement.style.pointerEvents = 'none';">&times;</span>
+                    <div id="regAlertMsg">The email provided is already in use!</div>
+                </div>
+                <h3 class="form-title">Register:</h3>
+                <form  novalidate id="registerForm" action="http://api.examgenerator.me/register" method="post" onsubmit="event.preventDefault(); submitExam();">
+                    <!-- <input type="text" autocomplete="username">
+                        <input type="password" autocomplete="new-password"> -->
+                    <div class="form-group">
+                        <label for="regEmail">Email:</label>
+                        <input type="text" id="regEmail" name="email" class="form-control" placeholder="E-mail" autocomplete="email" onchange="validateEmail()">
+                        <div  class="invalid-feedback">Please provide a valid email.</div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="regUsername">Username:</label>
+                        <input type="text" id="regUsername" name="username" class="form-control" placeholder="Username" autocomplete="username" onchange="validateUsername()">
+                        <div  class="invalid-feedback">Please provide a valid username.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPass">Password:</label>
+                        <input type="password" id="regPass" name="password" class="form-control" placeholder="Password" autocomplete="new-password" onchange="validatePass()">
+                        <div id="regPasInvFeedback" class="invalid-feedback">Password requirements are not met!</div>
+                        <small id="passInfo" class="form-text text-muted">Password must be minimum 8 characters long, and has to contain at least one uppercase and lowercase letter,and a digit.</small>
+                    <!-- </div> -->
+                    <!-- <div class="form-group" id="confDiv"> -->
+                        <label for="regConfPass">Confirm password:</label>
+                        <input type="password" id="regConfPass" name="passwordConf" class="form-control" placeholder="Confirm Password"  autocomplete="new-password"  onchange="validateConfPass()">
+                        <div class="invalid-feedback">Passwords are not matching!</div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Register" id="regSubmit" class="btn btn-primary  vertical-align">
+                        <small class="form-text text-muted" class="vertical-align"><a href="#">By clicking register, I agree to your terms.</a></small>
+                        <!-- <p><a href="#"> </a></p> -->
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var regForm = document.getElementById('registerForm')
+            var num = /[0-9]/;
+            var capLetter = /[A-Z]/;
+            var lowLetter = /[a-z]/;
+            function validateEmail(){
+                let emailField = regForm.elements["email"];
+                console.log("email: "+emailField.value);
+
+                if(emailField.value == ""){ 
+                    emailField.classList.add('is-invalid');
+                    emailField.classList.remove('is-valid');      
+                    console.log("no username")
+                    return false;
+                }
+                else{
+                    console.log("emailField is good")
+                    emailField.classList.remove('is-invalid');
+                    emailField.classList.add('is-valid');
+                    return true;
+                }
+            }
+            function validateUsername(){
+                let usernameField = regForm.elements["username"];
+                console.log("username: "+usernameField.value);
+                if(usernameField.value == ""){ 
+                    usernameField.classList.add('is-invalid');
+                    usernameField.classList.remove('is-valid');      
+                    console.log("no username")
+                    console.log("list: "+ usernameField.classList);
+                    return false;
+                }
+                else{
+                    console.log("usernameField is good")
+                    usernameField.classList.remove('is-invalid');
+                    usernameField.classList.add('is-valid');
+                    return true;
+                }
+            }
+            function validateConfPass(){
+                let passWordField = regForm.elements["password"];
+                let passWordConfirmField = regForm.elements["passwordConf"];
+                console.log("pass: "+ passWordField.value+" , passConf: "+ passWordConfirmField.value)
+                if(passWordField.value != passWordConfirmField.value || passWordConfirmField.value == ""){ 
+                    passWordConfirmField.classList.add('is-invalid');
+                    passWordConfirmField.classList.remove('is-valid');
+                    
+                    console.log("different passwords or empty")
+                    console.log("list: "+ passWordConfirmField.classList);
+                    return false;
+                }
+                else{
+                    console.log("passWordConfirmField is good")
+                    passWordConfirmField.classList.remove('is-invalid');
+                    passWordConfirmField.classList.add('is-valid');
+                    return true;
+                }
+            }
+            async function submitExam(){
+                if(validatePass() & validateConfPass() & validateUsername() & validateEmail()){
+                    console.log("ready to submit")
+                    let regFormData = $("#registerForm").serializeArray();
+                    console.log("elements:")
+                    console.log(regFormData)
+                    await $.post( "/register", {email: regFormData[0].value,username: regFormData[1].value,password: regFormData[2].value,passwordConf: regFormData[3].value},(err,d) => {
+                        console.log("original cb")
+                        console.log("err: ")
+                        console.log(err)
+                        console.log("d: ")
+                        console.log(d)
+                    })
+                    .done((data) => {
+                        console.log("data returned = ");
+                        console.log(data);
+                        if(data == "inUse"){
+                            var alertBox = document.getElementById("regAlert");
+                            // var alertMsg = document.getElementById("regAlertMsg");
+                            alertBox.style.pointerEvents = "auto";
+                            alertBox.style.opacity = "1";
+                            // alertBox.className = "alert success";
+                            // alertMsg.innerHTML = "<strong>Success!</strong> Redirecting... ";
+                            console.log("This email is already registered.")
+                        }
+                        if(data == "registered"){
+                            console.log("Successful registration.")
+                            window.location.href = "/";
+                        }
+                        // setTimeout(()=>{window.location.href = "/profile";}, 2000);
+                    })
+                    .fail((err) => {
+                        console.log("   fail")
+                        // alert("Error occured.\n Please try again!" );
+                        console.log("err: ");
+                        console.log(err);
+                        // window.location.href = "/profile";
+                    })
+                }
+                else{
+                    console.log("sth is wrong")
+                }
+
+            }
+            function validatePass() {
+                validateConfPass();
+                // document.getElementById("goodName").innerHTML = "We changed it!";
+                // let passWordField = document.getElementById('regPass')
+                // let passWordConfirmField = document.getElementById('regConfPass')
+                let passWordField = regForm.elements["password"];
+                // let passWordConfirmField = regForm.elements["passwordConf"];
+                console.log("username with new is "+ regForm.elements["username"].value)
+                if (passWordField.value.length < 8 || !num.test(passWordField.value) || !capLetter.test(passWordField.value) || !lowLetter.test(passWordField.value)) {
+                    console.log("incorrect pass")
+                    passWordField.classList.remove('is-valid');
+                    passWordField.classList.add('is-invalid');    
+                    return false;  
+                }
+                else {
+                    passWordField.classList.remove('is-invalid');
+                    passWordField.classList.add('is-valid');
+                    return true;
+                }
+            }
+                    
+        </script>
+    </div>
+
+
+</body>
+</html>

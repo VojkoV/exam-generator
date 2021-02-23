@@ -1,0 +1,28 @@
+{
+  "name": "project-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "api2pdf": "^1.1.0",
+    "axios": "^0.19.2",
+    "bcrypt": "^3.0.8",
+    "connect-mongo": "^3.2.0",
+    "docx": "^5.0.2",
+    "docx-templates": "^3.1.1",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "libreoffice-convert": "^1.0.5",
+    "mongoose": "^5.9.4",
+    "nodemon": "^1.19.4"
+  },
+  "devDependencies": {
+    "express-routes-catalogue": "^1.0.2"
+  }
+}

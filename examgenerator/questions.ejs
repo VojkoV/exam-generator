@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Questions  </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+
+<html>
+    <body>
+        <h1>ExamGenerator </h1>
+        <h2>Profile </h2>
+        <div id = 'userInfo'>	
+            <p>Name: <%= username %></p>
+            <p>Mail: <%= email %></p>
+        </div>
+        <h2>Folders </h2>	
+        <div class="list-group">
+            <%for (var folder in folders){%>
+                <%var s = JSON.stringify(folders[folder]);%>
+                <%let numOfQ = folders[folder].questions.length;%>
+                <br><a id= <%=folder%> onclick = "showQuestions(<%=folder%>, <%=s%>)"  href="#" class="list-group-item"><%= folders[folder].name %> <span class="badge"><%=numOfQ%></span> </a> 
+            <%}%>
+        </div>
+        <div id="folder-info"></div>
+        <div id="question-info"></div>
+    </body>
+    <p id="questions">_______________</p>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        
+    </script>
+
+    <div class="newF-form">
+        <p>Create a new Folder<p>
+        <form id="newFForm" action="/newF" method="post" onsubmit="event.preventDefault(); validateNameForm();">
+            <input type="text" name="fName" placeholder="Name" id="fName" required="">
+            <div class="tp">
+                <input type="submit" value="Create">
+            </div>
+            <p id="newFolderNameErr">
+        </form>
+    </div>
+    <div class = "buttons">
+        <a onclick="location.href = 'http://stackoverflow.com/questions/3486110/make-a-list-item-clickable-html-css';">Make A List Item Clickable</a>
+       
+        <br><button type="button">Click Me!</button>
+        <div id="delete"></div>
+        <br><a type="button" href="/logout">Logout</a>
+        <!-- <br><button type="button" href="/logout">Logout</button> -->
+    </div>  
+</html>

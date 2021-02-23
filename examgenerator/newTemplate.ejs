@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+  <link rel='icon' href='images/favicon.ico' type='image/x-icon'/> 
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/e7bf0ee0e1.js" crossorigin="anonymous"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <title> New Template </title>
+</head>
+
+<body id="grad1">
+    <div id="nav-placeholder">
+
+    </div>
+    <script>
+    $(()=>{$("#nav-placeholder").load("navbar.html");});//Load navbar
+    </script>
+
+
+    <div class = "content" id="content">
+        <!-- <div class="alert-container"> -->
+            <!-- <div class="alert success" id ="form-alert" >
+                this.parentElement.style.display='none';
+                document.getElementById("myDIV").style.opacity = "0.5";
+                <span class="closebtn" onclick="this.parentElement.style.opacity = '0';this.parentElement.style.pointerEvents = 'none';">&times;</span>
+                <div id="alertMsg">This is an alert box</div>
+            </div> -->
+        <!-- </div> -->
+        <!-- <div id = 'userInfo'>	
+            <p>Name: <%= username %>
+                <br>Mail: <%= email %>
+            </p>
+        </div> -->
+        <h2>Add a new template: </h2>
+        
+        <script type="text/javascript">
+            const placeholder = "<%-placeholder%>";
+            // const placeholderRegex = /\.p\./g;
+            const placeholderRegex = <%-placeholderRegex%>;
+
+            // const serverSidePlaceholder = `{0}`;
+            const serverSidePlaceholder = `<%-serverSidePlaceholder%>`;
+
+            var i = 3;
+            var nInputs = 4;
+            const maxInputs = 20;
+            function increment() {
+                i += 1;
+                nInputs += 1;
+                if(nInputs == maxInputs){
+                    document.getElementById("addInputBtn").disabled = true;
+                }
+            }
+            function decrement(){
+                if(nInputs == maxInputs){
+                    document.getElementById("addInputBtn").disabled = false;
+                }
+                nInputs -= 1;
+            
+            }
+
+            function addInputField() {
+                var r = document.createElement('DIV');
+                var y = document.createElement("INPUT");
+                var z = document.createElement("INPUT");
+                var btn = document.createElement('BUTTON');
+                btn.innerHTML = `<i class="fa fa-trash fa-lg"></i></button>`;
+                btn.setAttribute("class", "btn");
+                btn.onclick = () => {
+                    let toDelete = btn.parentNode;
+                    toDelete.parentNode.removeChild(toDelete);
+                    decrement();
+                };
+                // <input class="dash-input" type="text" name="a_level[+i][0]" required value="" placeholder="Placeholder" />
+                y.setAttribute("class", "dataExtra data");
+                y.setAttribute("type", "text");
+                y.setAttribute("value", "");
+                y.required = true;
+                y.setAttribute("placeholder", "Placeholder");
+
+                // y.classList.add("box", "faded-out")
+                // // and remove 'faded-out' in order to fade-in our element
+                // requestAnimationFrame(() => {
+                //     y.classList.remove("faded-out")
+                // })
+
+                z.setAttribute("class", "dataExtra data");
+                z.setAttribute("type", "text");
+                z.required = true;
+                z.setAttribute("placeholder", "Answer");
+                
+                increment();
+                y.setAttribute("name", "a_level[ " + i + " ][0]"); 
+                //Keep attribute in lower case
+                r.appendChild(y);
+                z.setAttribute("name", "a_level[ " + i + "][1]");
+                r.appendChild(z);
+                r.appendChild(btn);
+                // let id = "a_level[ " + i + "][1]";
+                // r.setAttribute("id", id); 
+                document.getElementById("form-div").appendChild(r);
+                // $("#"+id).fadeToggle("slow");
+                // document.getElementById("dataForm").appendChild(r);
+
+                // increment();
+                // var newField = document.createElement('div');
+                // newField.innerHTML = "Entry " + (1) + " <br><input type='text' name='field'+i>";
+                // document.getElementById("form-div").appendChild(newField);
+                // // counter++;
+            }
+            
+            function showUserInput(){
+                let elements = document.getElementsByClassName("data");
+                let values = [];
+                for(let e = 0;e<elements.length;e++){
+                    console.log("element "+e+" = "+elements[e].value);
+                    values.push(elements[e].value);
+                }       
+                return values;
+            }
+
+            function addPlaceholder(){
+                let template = document.getElementById('template');
+                template.value += placeholder;
+            }
+
+        
+            function validateTemplate() {
+                console.log("validateTemplate running");
+                $('#templateAlert').hide();
+                let template = document.getElementById('template');
+                template.setCustomValidity("");
+                console.log("template value = "+template.value);
+                let templateErrorMsg = document.getElementById('templateErrorMsg');
+                const found = template.value.match(placeholderRegex);
+                console.log("found array:")
+                console.log(found);
+                if(found){
+                    console.log("number of matches = "+found.length);
+                }
+                else console.log("no matches");
+                console.log("template = "+template.value);
+                if (!template.value) {
+                    console.log("template is empty");
+                    templateErrorMsg.innerHTML = `The template cannot be empty!`;
+                    $('#templateAlert').show();
+                    // var element = $("#tbEmail")[0];
+                    // element.setCustomValidity('The email address entered is already registerd.');
+                    template.setCustomValidity("This field cannot be left blankkkkkk");
+                    // alert("Name must be filled out");
+                    // showUserInput();
+                    return false;
+                }
+                if(found && found.length == 1){
+                    console.log("number of matches = "+found.length);
+                    console.log("correct template input:");
+                    let serverSideTemplate = template.value.replace(placeholderRegex, serverSidePlaceholder);
+                    console.log(serverSideTemplate);
+                }
+                else {
+                    console.log("incorrect template input");
+                    // $(".alert").alert(`works`);
+                    // $('.alert').show()
+                    templateErrorMsg.innerHTML = `The number of placeholders has to be 1!`;
+                    $('#templateAlert').show();
+                    if(!found) template.setCustomValidity(`Place a placeholder in the wanted position.`);
+                    else template.setCustomValidity(`There can be only ONE placeholder.`);
+                    return false;
+                }
+                let elements = showUserInput();
+                template.setCustomValidity("");
+                // templateErrorMsg.innerHTML = ``;
+                $('#templateAlert').hide();
+                return elements;
+            }
+            function submitForm(){
+                console.log("submitForm running");
+                let q = validateTemplate();
+                if(q) {
+                    console.log("QUESTION = ");
+                    console.log(q);
+                    on(q);
+                }
+                else{
+                    console.log("sth went wrong");
+                }
+                return false;
+            }
+        </script>
+
+        <form class="form" id="dataForm" method="POST" action="/" onsubmit="event.preventDefault(); submitForm();">
+            <div id="form-div">
+                <br><label for="template">Question template</label> <br />
+                <input class="data" id="template" type="text" name="template" 
+                    size="45%" 
+                    required autocomplete="off" onchange="$('#templateAlert').hide();validateTemplate();">
+                <div class="alert alert-danger alert-inline" id="templateErrorMsg" style="display:none;" role="alert">Well done!</div>
+                <br>
+                <small id="templateInfo" class="form-text text-muted"> </small>
+                <button type="button" class="btn btn-outline-primary btn-sm" style="margin-top: 10px;" onclick="addPlaceholder();validateTemplate();"><i class="fa fa-plus"></i> Placeholder</button>
+
+                <hr>
+                <label for="a_level[+i][0]">Insert data</label> <br />
+                <small id="dataInputInfo" class="form-text text-muted">
+                    Insert pairs of data:<br>
+                    Placeholder - replaces ".p." in the template<br>
+                    Answer - is the solution when its placeholder is inserted<br>
+                </small>
+                <!-- 1. dataset -->
+                <input class="data" type="text" name="a_level[0][0]" required value="" placeholder="Placeholder" />
+                <input class="data" type="text" name="a_level[0][1]" required value="" placeholder="Answer" />
+                <!-- 2. dataset -->
+                <br>
+                <input class="data" type="text" name="a_level[1][0]" required value="" placeholder="Placeholder" />
+                <input class="data" type="text" name="a_level[1][1]" required value="" placeholder="Answer" />
+                <!-- 3. dataset -->
+                <br>
+                <input class="data" type="text" name="a_level[2][0]" required value="" placeholder="Placeholder" />
+                <input class="data" type="text" name="a_level[2][1]" required value="" placeholder="Answer" />
+                <!-- 4. dataset -->
+                <br>
+                <input class="data" type="text" name="a_level[3][0]" required value="" placeholder="Placeholder" />
+                <input class="data" type="text" name="a_level[3][1]" required value="" placeholder="Answer" />
+            </div>
+            <!-- <button class="btn" onclick="addInputField()"><i class="fa fa-plus"></i></button> -->
+            <div class="" style="padding-bottom:10px">
+                <small id="maxInputsMsg" class="form-text text-muted"></small>
+                <button id="addInputBtn" class="btn" onclick="addInputField()"><i class="fa fa-plus"></i></button>      
+            </div>
+            <div class="dash-submit">
+                <input class="btn btn-primary" type="submit" value="Save" />
+            </div>
+        </form>
+        <!-- <div style="padding:20px">
+            <h2>Overlay with Text</h2>
+            <button onclick="on()">Turn on overlay effect</button>
+        </div> -->
+    </div>  
+
+    <script>
+        // Set dataset input instructions
+        document.getElementById("dataInputInfo").innerHTML = "Insert pairs of data:<br> Placeholder - replaces "+
+        placeholder+" in the template<br> Answer - is the solution when its placeholder is inserted<br>";
+        // Set template input placeholder
+        document.getElementById("template").setAttribute("placeholder","What is the capital of "+placeholder+"?");
+        // Set template placeholder instructions
+        document.getElementById("templateInfo").innerHTML = "Write the question template and mark the place where the data will be inserted with \""+placeholder+"\"";
+        // Set the custom message for number of datasets
+        document.getElementById("maxInputsMsg").innerHTML = "The maximum number of data pairs is "+maxInputs+".";
+    </script>
+
+    <!-- <div style="padding:20px">
+        <h2>Overlay with Text</h2>
+        <button onclick="on()">Turn on overlay effect</button>
+    </div> -->
+    <div id="overlay" >
+        <div class="container text-dark bg-light" id="content-overlay">
+            <div class="alert warning" id ="form-alert" >
+                <!-- this.parentElement.style.display='none'; -->
+                <!-- document.getElementById("myDIV").style.opacity = "0.5"; -->
+                <span class="closebtn" onclick="this.parentElement.style.opacity = '0';this.parentElement.style.pointerEvents = 'none';">&times;</span>
+                <div id="alertMsg"></div>
+                <!-- <div id="alertMsg">Invalid folder name.<br> Name entered is already in use!</div> -->
+            </div>
+
+            <br><h1>Save to...</h1>
+            <h2>An existing folder:</h2>
+            <form class = "overlay" action="/" method="post"  onsubmit="event.preventDefault();saveToFolder();">
+                <div class="form-group">
+                    <label for="selectF" class="text-dark bg-light">Folders:</label>
+                    <select id="selectF" class="form-control">
+                        <%for (var folder in folders){%>
+                            <option value="<%=folders[folder]._id%>" class ="overlay"> <%=folders[folder].name%></option>
+                        <%}%>
+                    </select>
+                    <br><button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+            
+            <h2>A new folder:</h2>
+            <form action="/" method="post" class = "overlay" onsubmit="event.preventDefault();validateNameForm();">
+                <div class="">
+                    <label for="fName">Folder name:</label>
+                    <input type="text" class = "form-control" required id="fName" placeholder="Folder" >
+                    <small id="fNameHelp" class="form-text text-muted">Enter a name for the new folder.</small>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top:5px">Save</button>
+                
+            </form>
+            <br><button type="button" class="btn btn-outline-primary  float-right" onclick="off()">Cancel</button>
+        </div>
+
+        <span style=" color: rgba(8, 136, 255); ">
+            <i onclick="off()" class="far fa-times-circle  topright"></i>
+        </span>
+    </div>
+
+    <script>
+        function saveToFolder(){
+            let folderId = document.getElementById('selectF');
+            console.log("save to: "+folderId.value);  
+            $.post( "/saveTemplate", { folder_id : folderId.value, question : question })
+            .done(() => {
+                var alertBox = document.getElementById("form-alert");
+                var alertMsg = document.getElementById("alertMsg");
+                alertBox.style.pointerEvents = "auto";
+                alertBox.style.opacity = "1";
+                alertBox.className = "alert success";
+                alertMsg.innerText = "Success! Redirecting...";
+                alertMsg.style.margin = "10px 0";
+                setTimeout(()=>{window.location.href = "/profile";}, 2000);
+            })
+            .fail(() => {
+                alert( "error" );
+            })
+        }
+
+        function validateNameForm(){
+            // template.setCustomValidity(`There must be ONE placeholder.`);
+            var fNames = <%-JSON.stringify(fNames)%>;
+            var newFolder = document.getElementById('fName')
+            let nameIsInUse = fNames.includes(newFolder.value);
+            if(!nameIsInUse){
+                console.log("name entererd is valid");
+                console.log("save to: "+newFolder.value);
+                $.post( "/saveTemplate", { fName : newFolder.value, question : question })
+                .done(() => {
+
+                    // var alertBox = document.getElementById("form-alert");
+                    // var alertMsg = document.getElementById("alertMsg");
+                    // alertBox.style.pointerEvents = "auto";
+                    // alertBox.style.opacity = "1";
+                    // alertBox.className = "alert success";
+                    // alertMsg.innerText = "Success! Redirecting...";
+                    // alertMsg.style.margin = "10px 0";
+
+
+                    var alertBox = document.getElementById("form-alert");
+                    var alertMsg = document.getElementById("alertMsg");
+                    alertMsg.innerText = "Success! Redirecting...";
+                    alertMsg.style.margin = "10px 0";
+                    alertBox.style.pointerEvents = "auto";
+                    alertBox.style.opacity = "1";
+                    alertBox.className = "alert success";
+                    // alertMsg.innerText = "Template was successfully saved!";
+                    setTimeout(()=>{window.location.href = "/profile";}, 2000);
+                    // alert( "second success" );
+                })
+                .fail(() => {
+                    alert( "error" );
+                })
+            }
+            else{
+                console.log("name entered is already in use");
+                var alertBox = document.getElementById("form-alert");
+                var alertMsg = document.getElementById("alertMsg");
+                alertMsg.innerText = "Invalid folder name.\n Name entered is already in use!";
+                // alertMsg.style.margin = "10px 0";
+                alertBox.style.pointerEvents = "auto";
+                alertBox.style.opacity = "1";
+                alertBox.className = "alert warning";
+            }    
+        }
+
+        var question = null;
+        function on(q) {
+            // location.href = `http://api.examgenerator.me/editF/${editBtn.value}`;
+            question = q;
+            console.log("Question passed to overlay:");
+            console.log(question);
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function off() {
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>  
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+        <link rel='icon' href='images/favicon.ico' type='image/x-icon'/> 
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/e7bf0ee0e1.js" crossorigin="anonymous"></script>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        
+        <title> Profile </title>
+    </head> 
+    <body id="grad1">
+        <div id="nav-placeholder">
+            <script>
+                $(() => {
+                    $("#nav-placeholder").load("navbar.html");
+                });
+                var fNames = <%-JSON.stringify(fNames)%>;
+            </script>
+        </div>
+    <div class = "content">
+        <h1>ExamGenerator </h1>
+        <h2>Profile </h2>
+        <div id = 'userInfo'>	
+            <p>Name: <%= username %></p>
+            <p>Mail: <%= email %></p>
+        </div>
+        <h2> Folders </h2>	
+        <div class="list-group">
+            <%for (var folder in folders){%>
+                <%var s = JSON.stringify(folders[folder]);%>
+                <%let numOfQ = folders[folder].questions.length;%>
+                <br><a id= <%=folder%> onclick = "showQuestions(<%=folder%>, <%=s%>)"  href="#" class="list-group-item"><%= folders[folder].name %> <span class="badge"><%=numOfQ%></span> </a> 
+            <%}%>
+        </div>
+        <div id="folder-info"></div>
+        <div id="question-info"></div>
+        
+        <p id="questions">_______________1</p>
+        <br><p id="editFolder"></p>
+        <div id="delete"></div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+        function showQuestions(id,folder) {
+            document.getElementById("questions").innerHTML = "";
+            var regex = /{.*}/; //gi;
+            // Clear the space for new questions
+            var parent = document.getElementById("folder-info");
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+            if(folder.questions.length == 0){
+                document.getElementById("questions").innerHTML = "This folders is empty!";
+            }
+            else{
+                // document.getElementById("questions").innerHTML = "";
+                let element = document.getElementById("folder-info");
+                for (let question = 0;question < folder.questions.length; question++){
+                    let q = JSON.parse(folder.questions[question]);
+                    let text = '';
+                    if(q.template){
+                        text = `Question: ${question+1}`+": "+q.template.replace(regex,"______");
+                    }
+                    else{
+                        text = `Question: ${question+1}`+": "+q.question;    
+                    }
+                    let a = document.createElement('a');
+                    let linkText = document.createTextNode(text);
+                    a.appendChild(linkText);
+                    a.href = `#`;
+                    element.appendChild(a);
+                    let br = document.createElement('br');
+                    element.appendChild(br);
+                }
+            }
+
+            // document.getElementById("editFolder").innerHTML = "Edit folder button";
+            let text = `Edit ${folder.name}`;
+            let editBtn = document.getElementById('editBtn');
+            if(editBtn){
+                editBtn.innerHTML = text; 
+            }
+            else{
+                editBtn = document.createElement('button');
+                editBtn.setAttribute("id", "editBtn");
+                editBtn.setAttribute("name", "edit");
+                editBtn.onclick = () => { 
+                    location.href = `http://api.examgenerator.me/editF/${editBtn.value}`;
+                    // console.log(" requested editing folder: "+editBtn.value);
+                    // $.get("/editF", { folder : editBtn.value }, () =>{
+                    //     return console.log("successful request editing folder: "+editBtn.value);
+                    // });
+                    // return console.log("Delete confirmed "+deleteBtn.value);
+                };
+                let linkText = document.createTextNode(text);
+                editBtn.appendChild(linkText);
+                editBtn.href = `#`;
+                let element = document.getElementById("editFolder");
+                element.appendChild(editBtn);
+            }
+            editBtn.setAttribute("value", ""+folder._id);
+
+
+
+
+
+            // document.getElementById("editFolder").innerHTML = "Edit folder button";
+            text = `Delete ${folder.name}`;
+            deleteBtn = document.getElementById('deleteBtn');
+            if(deleteBtn){
+                deleteBtn.innerHTML = text; 
+            }
+            else{
+                deleteBtn = document.createElement('button');
+                deleteBtn.setAttribute("id", "deleteBtn");
+                deleteBtn.setAttribute("name", "delete");
+                deleteBtn.onclick = () => { 
+                    if(confirm("Are your sure you want to delete the folder?")){
+                        $.post("/deleteFolder", { folder_id : deleteBtn.value }, () =>{
+                            console.log("successful deletition "+deleteBtn.value);
+                            setTimeout(()=>{window.location.href = "/profile";}, 2000);
+                        });
+                        // return console.log("Delete confirmed "+deleteBtn.value);
+                    }
+                    else return console.log("Delete canceled");
+                };
+                let linkText = document.createTextNode(text);
+                deleteBtn.appendChild(linkText);
+                deleteBtn.href = `#`;
+                let element = document.getElementById("delete");
+                element.appendChild(deleteBtn);
+            }
+            deleteBtn.setAttribute("value", ""+folder._id);
+        }
+
+        function validateNameForm(){
+            var fNameField = document.getElementById('fName')
+            var form = document.getElementById('newFForm')
+            var newFolder = document.getElementById('fName')
+            let nameIsInUse = fNames.includes(newFolder.value);
+            if(!nameIsInUse){
+                console.log("name entererd is valid");
+                console.log("create: "+newFolder.value);
+                $.post( "/createFolder", { fName : newFolder.value },(data)=>{
+                    alert(data);
+                })
+                .done(() => {
+                    // var alertBox = document.getElementById("form-alert");
+                    // var alertMsg = document.getElementById("alertMsg");
+                    // alertMsg.innerText = "Success! Redirecting...";
+                    // alertMsg.style.margin = "10px 0";
+                    // alertBox.style.pointerEvents = "auto";
+                    // alertBox.style.opacity = "1";
+                    // alertBox.className = "alert success";
+                    
+                    // alertMsg.innerText = "Template was successfully saved!";
+                    setTimeout(()=>{window.location.href = "/profile";}, 2000);
+                    // alert( "second success" );
+                })
+                // .fail(() => {
+                //     alert( "error" );
+                // })
+            }
+            else{
+                console.log("name entered is already in use");
+                document.getElementById("newFolderNameErr").innerHTML = `Folder \"${fName.value}\" already exists. Choose a different name.`;
+
+                // var alertBox = document.getElementById("form-alert");
+                // var alertMsg = document.getElementById("alertMsg");
+                // alertMsg.innerText = "Invalid folder name.\n Name entered is already in use!";
+
+                // alertMsg.style.margin = "10px 0";
+
+                // alertBox.style.pointerEvents = "auto";
+                // alertBox.style.opacity = "1";
+                // alertBox.className = "alert warning";
+            }  
+        }
+        </script>
+
+        <div class="newF-form">
+            <p>Create a new Folder<p>
+            <form id="newFForm" action="/createFolder" method="post" onsubmit="event.preventDefault(); validateNameForm();">
+                <input type="text" name="fName" placeholder="Name" id="fName" required="">
+                <div class="tp">
+                    <input type="submit" value="Create">
+                </div>
+                <p id="newFolderNameErr">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
