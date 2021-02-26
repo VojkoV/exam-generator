@@ -29,6 +29,25 @@
     // $(window).on('beforeunload', function(){
     //     $(window).scrollTop(0);
     // });
+
+        // let l = document.createElement("a");
+        // console.log("trying to download")
+        // l.download = `Helllo_exam.docx`;
+        // l.href = "/exams/ExamSolutions_1614266898729";
+        // l.click();
+        // console.log("window.location.pathname: ")
+        // console.log(window.location.pathname)
+
+        // console.log("before try")
+        // var link = document.createElement("a");
+        // link.setAttribute('download', "Solutionssss");
+        // link.href = `../exams/ExamSolutions_1614266898729.docx`;
+        // // link.href = ".\exams\ExamSolutions_1614266898729.docx"
+        // document.body.appendChild(link);
+        // link.click();
+        // link.remove();
+        // console.log("after try")
+
     </script>
 
     <!-- <script>
@@ -239,28 +258,38 @@
              .done((filePaths) => {
                 console.log("filePaths = ");
                 console.log(filePaths)
-                let link = document.createElement("a");
-                // // link.download = "Exam_"+  Date.now()+".docx";
-                // link.download = `${fileName}.${fileExtension}`;
-                // // link.download = `Exam_1.docx`;
-                // link.href = filePath;
-                // // link.href = "https://media.api2pdf.com/059c29c0-783d-11ea-9367-95a2be9f6319?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJSHKEFTKBQX2AUYQ%2F20200406%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200406T193007Z&X-Amz-Expires=86400&X-Amz-Signature=bd61b62f00f9d0599b697052ba8711844ffeb18ffecd08277de1b7c8c7af1084&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3Bfilename%3D%22059c29c0-783d-11ea-9367-95a2be9f6319.pdf%22&response-content-type=application%2Fpdf";
-                // link.click();
-                
-                if(filePaths.docx){
-                    link.download = `${fileName}.docx`;
-                    link.href = filePaths.docx;
+
+                console.log("DIRNAME")
+                console.log(window.location.pathname)
+                if(filePaths.docx != undefined){
+                    var link = document.createElement("a");
+                    link.setAttribute('download', `${fileName}.docx`);
+                    link.href = `..${filePaths.docx}`
+                    document.body.appendChild(link);
                     link.click();
+                    link.remove();
                 }
-                if(filePaths.solutions){
-                    link.download = `${fileName}_solutions.docx`;
-                    link.href = filePaths.solutions;
+                if(filePaths.solutions != undefined){
+                    var link = document.createElement("a");
+                    link.setAttribute('download', `Solutions_${fileName}.docx`);
+                    link.href = `..${filePaths.solutions}`
+                    document.body.appendChild(link);
                     link.click();
+                    link.remove();
                 }
-                if(filePaths.pdf){
-                    link.download = `${fileName}.pdf`;
-                    link.href = filePaths.pdf;
+                if(filePaths.pdf != undefined){
+                    // let link3 = document.createElement("a");
+                    // console.log("there is pdf")
+                    // link3.download = `${fileName}.pdf`;
+                    // link3.href = filePaths.pdf;
+                    // link3.click();
+
+                    var link = document.createElement("a");
+                    link.setAttribute('download', `${fileName}.pdf`);
+                    link.href = `..${filePaths.pdf}`
+                    document.body.appendChild(link);
                     link.click();
+                    link.remove();
                     // setTimeout(()=>{link.click();}, 500);
                 }
                 // let link = document.createElement("a");
@@ -322,7 +351,9 @@
                 alertBox.className = "alert success";
                 alertMsg.innerHTML = "<strong>Success!</strong> Redirecting... ";
                 // alertMsg.style.margin = "10px 0";
-                setTimeout(()=>{window.location.href = "/newExam";}, 500);
+
+
+                // setTimeout(()=>{window.location.href = "/newExam";}, 2000);
                 
             })
             .fail((err) => {
