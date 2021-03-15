@@ -35,9 +35,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // serve static files from template
 // app.use(express.static(__dirname + '/templateLogReg'));
 var routes = require('./routes/router');
+app.use(express.static("./examgenerator/"));
 app.use('/', routes);
 
-app.use(express.static("./examgenerator/"));
 
 
 // include routes
