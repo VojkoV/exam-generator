@@ -30,7 +30,7 @@ jobs:
       - name: Clone repository
         run: ssh staging "git clone https://github.com/${{github.repository}} $GITHUB_SHA"
       - name: Build Dockerfile
-        run: ssh staging "cd $GITHUB_SHA; franko=$(echo ${{github.repository}}-${{github.sha}} | tr '[:upper:]' '[:lower:]'); docker build -t $franko ."
+        run: ssh staging "cd $GITHUB_SHA; docker build -t examgen-${{github.sha}} ."
       - name: Remove any old containers
         run: ssh staging "docker container rm -f ${{secrets.CONTAINER_NAME}} || true"
       - name: Start docker
