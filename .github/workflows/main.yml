@@ -1,0 +1,39 @@
+name: CI
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    name: "Deploy to hosting"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host staging
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.SERVER_USER }}
+          SSH_KEY: ${{ secrets.SSH_RSA }}
+          SSH_HOST: ${{ secrets.SERVER_IP }}
+
+      - name: Clone repository
+        run: ssh staging "git clone https://github.com/${{github.repository}} $GITHUB_SHA"
+      - name: Build Dockerfile
+        run: ssh staging "cd $GITHUB_SHA; docker build -t ${{github.repository}}-${{github.sha}} ."
+      - name: Remove any old containers
+        run: ssh staging "docker container rm -f ${{secrets.CONTAINER_NAME}} || true"
+      - name: Start docker
+        run: ssh staging "docker run --restart unless-stopped -d -p 127.0.0.1:${{ secrets.DOCKER_PORT }}:3000 --name ${{secrets.CONTAINER_NAME}} ${{github.repository}}-${{github.sha}}"
+      - name: Cleanup
+        run: ssh staging "cd ~; rm -rf $GITHUB_SHA; docker image prune -a -f"
