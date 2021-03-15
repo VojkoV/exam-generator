@@ -34,6 +34,6 @@ jobs:
       - name: Remove any old containers
         run: ssh staging "docker container rm -f ${{secrets.CONTAINER_NAME}} || true"
       - name: Start docker
-        run: ssh staging "docker run --restart unless-stopped -d -p 127.0.0.1:${{ secrets.DOCKER_PORT }}:3000 --name ${{secrets.CONTAINER_NAME}} ${{github.repository}}-${{github.sha}}"
+        run: ssh staging "docker run --restart unless-stopped -d -p 127.0.0.1:${{ secrets.DOCKER_PORT }}:3000 --name ${{secrets.CONTAINER_NAME}} examgen-${{github.sha}}"
       - name: Cleanup
         run: ssh staging "cd ~; rm -rf $GITHUB_SHA; docker image prune -a -f"
